@@ -35,7 +35,9 @@ function renderLoadingPosts() {
         const post = state.posts[ name ];
         switch ( post.status ) {
             case 'loading':
-                output += '<li>' + name + ': ' + ( post.transfer.loaded / ( post.transfer.total + Number.EPSILON ) ) + '%</li>';
+                output += post.transfer.total > 0
+                    ? '<li>' + name + ': ' + Math.floor( 100 * post.transfer.loaded / post.transfer.total ) + '%</li>'
+                    : '<li>' + name + ': loading (unknown size)</li>';
                 break;
             
             case 'loaded':
@@ -199,6 +201,7 @@ function benchmark( next ) {
         let toc = tic;
         let count = 0;
         let ms = 0;
+        const RUNTIME = post.runLong ? 3 * LOOP_TIME : LOOP_TIME;
 
         do {
             const content = post.content + '<p>' + count + '</p>';
@@ -207,7 +210,9 @@ function benchmark( next ) {
             toc = performance.now();
             count += 1;
             ms += toc - _tic;
-        } while ( toc - tic < LOOP_TIME );
+        } while ( toc - tic < RUNTIME );
+
+        post.runLong = count < 3;
 
         post.runs[ choice ].ms += ms;
         post.runs[ choice ].count += count;
