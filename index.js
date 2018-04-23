@@ -212,11 +212,15 @@ function benchmark( next ) {
         post.runs[ choice ].ms += ms;
         post.runs[ choice ].count += count;
 
+        const prevAvg = Math.round( 1000 * post.runs.prev.ms / ( post.runs.prev.count + Number.EPSILON ) ) / 1000; 
+        const nextAvg = Math.round( 1000 * post.runs.next.ms / ( post.runs.next.count + Number.EPSILON ) ) / 1000;
+        const diff = Math.abs( prevAvg - nextAvg );
+
         post.node.innerHTML = (
             '<div>' + 
-            '<p><strong>' + name + '</strong></p>' +
-            '<p>prev: ' + Math.round( 1000 * post.runs.prev.ms / ( post.runs.prev.count + Number.EPSILON ) ) / 1000 + ' ms avg (' + post.runs.prev.count + ' runs)</p>' +
-            '<p>next: ' + Math.round( 1000 * post.runs.next.ms / ( post.runs.next.count + Number.EPSILON ) ) / 1000 + ' ms avg (' + post.runs.next.count + ' runs)</p>' +
+            '<p><strong>' + name + '</strong> - ' + ( prevAvg < nextAvg ? 'prev' : 'next') + ' faster by ' + Math.floor( 1000 * diff ) / 1000 + ' ms (' + Math.floor( 1000 * diff / Math.max( prevAvg, nextAvg ) ) / 10 + '%)</p>' +
+            '<p' + ( prevAvg < nextAvg ? ' style="color: green;"' : '' ) + '>prev: ' + prevAvg + ' ms avg (' + post.runs.prev.count + ' runs)</p>' +
+            '<p' + ( nextAvg < prevAvg ? ' style="color: green;"' : '' ) + '>next: ' + nextAvg + ' ms avg (' + post.runs.next.count + ' runs)</p>' +
             '</div>'
         );
 
