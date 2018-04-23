@@ -9,4 +9,7 @@ document.getElementById( 'next-parser-content' ).value = (
 document.getElementById( 'post-list-content' ).value = `
 https://raw.githubusercontent.com/dmsnell/gutenberg-document-library/master/library/demo-post.html
 https://raw.githubusercontent.com/dmsnell/gutenberg-document-library/master/library/shortcode-shortcomings.html
+https://raw.githubusercontent.com/dmsnell/gutenberg-document-library/master/library/redesigning-chrome-desktop.html
+https://raw.githubusercontent.com/dmsnell/gutenberg-document-library/master/library/web-at-maximum-fps.html
+https://raw.githubusercontent.com/dmsnell/gutenberg-document-library/master/library/early-adopting-the-future.html
 `;
