@@ -119,7 +119,7 @@ function loadPosts( next ) {
     }
 }
 
-function compareOutputs( next ) {
+async function compareOutputs( next ) {
     const startedAt = performance.now();
     const output = document.getElementById( 'comparing-parsers' );
     output.innerHTML = '';
@@ -135,8 +135,8 @@ function compareOutputs( next ) {
             continue;
         }
 
-        post.prevParse = state.input.prevParser( post.content );
-        post.nextParse = state.input.nextParser( post.content );
+        post.prevParse = await state.input.prevParser( post.content );
+        post.nextParse = await state.input.nextParser( post.content );
 
         post.isEqual = window.deepEqual( post.prevParse, post.nextParse );
 
@@ -191,7 +191,7 @@ function benchmark( next ) {
     }
     report.appendChild( ul );
 
-    const loop = () => {
+    const loop = async () => {
         // grab a random post and randomly pick the parser
         const choice = ( Math.random() > 0.5 ) ? 'prev' : 'next';
         const parse = choice === 'prev' ? state.input.prevParser : state.input.nextParser;
@@ -206,7 +206,7 @@ function benchmark( next ) {
         do {
             const content = post.content + '<p>' + count + '</p>';
             const _tic = performance.now();
-            parse( content );
+            const output = await parse( content );
             toc = performance.now();
             count += 1;
             ms += toc - _tic;
